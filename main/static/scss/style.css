@@ -1,0 +1,751 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition-duration: 0.6s;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f1f1f1;
+}
+
+.RegisterPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.RegisterPage .container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+}
+.RegisterPage .container .image {
+  height: 100vh;
+  width: 60%;
+  background: linear-gradient(rgba(0, 0, 0, 0.701), rgba(0, 0, 0, 0.197)), url("https://source.unsplash.com/1600x900/?nature, mountain, mist, women");
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+}
+.RegisterPage .container .form {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.RegisterPage .container .form form {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 70%;
+  animation: flipfromtop 0.9s 1 forwards;
+}
+.RegisterPage .container .form form h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #010e2a;
+}
+.RegisterPage .container .form form .input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.RegisterPage .container .form form .input-group .email-group {
+  display: flex;
+  justify-content: space-between;
+}
+.RegisterPage .container .form form .input-group .email-group input {
+  width: 70%;
+}
+.RegisterPage .container .form form .input-group label {
+  font-size: 15px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+.RegisterPage .container .form form .input-group input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #f1f1f1;
+  outline: none;
+}
+.RegisterPage .container .form form .input-group button {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background-color: #19233a;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+.RegisterPage .container .form form .input-group button:hover {
+  background-color: #010e2a;
+}
+
+.Home {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  background-color: #d6e4e2;
+  flex-direction: row;
+}
+.Home .sidebar {
+  width: 15%;
+  height: 100vh;
+  position: relative;
+  background-image: url("../images/road.jpg");
+  background-size: cover;
+  background-position: center;
+  animation: bgMove 40s infinite linear;
+}
+@keyframes bgMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.Home .sidebar .inner .top {
+  padding: 10px;
+  color: #fff;
+  width: 100%;
+  height: 83vh;
+  backdrop-filter: blur(7px) saturate(191%);
+  -webkit-backdrop-filter: blur(7px) saturate(191%);
+  background-color: rgba(1, 38, 37, 0.75);
+}
+.Home .sidebar .inner .top .logo {
+  font-size: 24px;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.0862745098);
+}
+.Home .sidebar .inner .top .menu ul {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 10px 0;
+  gap: 10px;
+}
+.Home .sidebar .inner .top .menu ul .active {
+  background-color: #5fc370;
+  border-radius: 8px;
+}
+.Home .sidebar .inner .top .menu ul .active a {
+  color: #fff;
+}
+.Home .sidebar .inner .top .menu ul li {
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  animation: appearfromleft 0.5s 1 forwards;
+}
+.Home .sidebar .inner .top .menu ul li a {
+  color: #5fc370;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.Home .sidebar .inner .top .menu ul li a i {
+  margin-right: 5px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  padding: 15px;
+  border-radius: 50%;
+  background-color: #008115;
+  color: #fff;
+}
+.Home .sidebar .inner .top .menu ul li:hover {
+  background-color: #5fc370;
+  border-radius: 8px;
+}
+.Home .sidebar .inner .top .menu ul li:hover a {
+  color: #fff;
+}
+.Home .sidebar .inner .top .menu ul li:hover a i {
+  animation: pop 0.5s 1 forwards;
+}
+.Home .sidebar .inner .bottom {
+  backdrop-filter: blur(7px) saturate(191%);
+  -webkit-backdrop-filter: blur(7px) saturate(191%);
+  background-color: rgba(1, 38, 37, 0.75);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+}
+.Home .sidebar .inner .bottom .links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.Home .sidebar .inner .bottom .links ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.Home .sidebar .inner .bottom .links ul li {
+  padding: 5px 0;
+}
+.Home .sidebar .inner .bottom .links ul li a {
+  color: #5fc370;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.Home .sidebar .inner .bottom .links ul li a:hover {
+  color: #fff;
+}
+.Home .sidebar .inner .bottom .links ul li a i {
+  margin-right: 5px;
+  height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10px;
+  padding: 12px;
+  border-radius: 50%;
+  color: #fff;
+  animation: appearfromleft 0.9s 1 forwards;
+}
+.Home .sidebar .inner .bottom p {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+}
+.Home .main {
+  width: 85%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.Home .main nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background-color: #fff;
+  width: calc(100% - 20px);
+  border-radius: 8px;
+}
+.Home .main nav .profile {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.Home .main nav .profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  background-color: #005f0f;
+  border: 2px solid #fff;
+}
+.Home .main nav .profile .details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: -20px;
+}
+.Home .main nav .profile .details h3 {
+  font-size: 18px;
+}
+.Home .main nav .profile .details p {
+  font-size: 14px;
+  color: #ccc;
+}
+.Home .main nav ul {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  flex-direction: row;
+}
+.Home .main nav ul li a {
+  text-decoration: none;
+  color: #008115;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+.Home .main nav ul li a i {
+  margin-right: 5px;
+}
+.Home .main nav ul li a:hover {
+  transform: scale(1.1);
+}
+.Home .main nav .notifications button {
+  background-color: #008115;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.Home .main nav .notifications button:hover {
+  background-color: #005f0f;
+}
+.Home .main .content {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: row;
+}
+.Home .main .content .welcome {
+  text-align: center;
+  margin-top: 5%;
+}
+.Home .main .content .welcome h1 {
+  color: #008115;
+  margin-bottom: 10px;
+}
+.Home .main .content .welcome img {
+  width: 50%;
+}
+.Home .main .content .welcome p {
+  padding: 10px 0;
+}
+.Home .main .content .welcome .buttons {
+  margin-top: 20px;
+}
+.Home .main .content .welcome .buttons a {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #008115;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+.Home .main .content .welcome .buttons a:hover {
+  background-color: #005f0f;
+}
+.Home .main .content .tab-btn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  width: 20%;
+  border-right: rgba(36, 36, 36, 0.1176470588) 1px solid;
+  position: relative;
+  z-index: 5;
+  height: calc(100vh - 120px);
+  background-color: #fff;
+}
+.Home .main .content .tab-btn button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #fff;
+  color: #242424;
+  font-weight: 600;
+  border-radius: 4px;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+.Home .main .content .tab-btn button.active {
+  background-color: #008115;
+  color: #fff;
+}
+.Home .main .content .tab-btn button:hover {
+  cursor: pointer;
+  background-color: #005f0f;
+  color: #fff;
+}
+.Home .main .content .tabcontent {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  animation: flipfromtop 0.3s 1 forwards;
+}
+.Home .main .content .tabcontent h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #242424;
+}
+.Home .main .content .tabcontent .profile {
+  max-height: 100%;
+  min-height: 100%;
+  overflow-y: scroll;
+}
+.Home .main .content .tabcontent .profile .image {
+  width: 100%;
+  background-image: url("../images/cover.webp");
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  position: relative;
+}
+.Home .main .content .tabcontent .profile .image img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid #fff;
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  background-color: #fff;
+  transform: translateX(-50%);
+}
+.Home .main .content .tabcontent .profile .details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6%;
+  width: 100%;
+}
+.Home .main .content .tabcontent .profile .details h4 {
+  color: #242424;
+  font-weight: 30px;
+}
+.Home .main .content .tabcontent .profile .details p {
+  color: #ccc;
+}
+.Home .main .content .tabcontent .profile .details .cards {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 1%;
+  flex-wrap: wrap;
+}
+.Home .main .content .tabcontent .profile .details .cards .card {
+  width: 30%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+.Home .main .content .tabcontent .profile .details .cards .card h4 {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.Home .main .content .tabcontent .profile .details .cards .card p {
+  color: #ccc;
+}
+.Home .main .content .tabcontent #settingsForm, .Home .main .content .tabcontent #resetPasswordForm {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 1%;
+  flex-wrap: wrap;
+}
+.Home .main .content .tabcontent #settingsForm .input-group, .Home .main .content .tabcontent #resetPasswordForm .input-group {
+  width: 30%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  display: flex;
+  flex-direction: column;
+}
+.Home .main .content .tabcontent #settingsForm .input-group.submit, .Home .main .content .tabcontent #resetPasswordForm .input-group.submit {
+  width: 100%;
+  align-items: center;
+  box-shadow: none;
+}
+.Home .main .content .tabcontent #settingsForm .input-group label, .Home .main .content .tabcontent #resetPasswordForm .input-group label {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.Home .main .content .tabcontent #settingsForm .input-group input, .Home .main .content .tabcontent #resetPasswordForm .input-group input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+.Home .main .content .tabcontent #settingsForm .input-group select, .Home .main .content .tabcontent #resetPasswordForm .input-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+.Home .content {
+  height: 88vh;
+  background-color: #fff;
+  width: calc(100% - 20px);
+  border-radius: 8px;
+}
+
+#profileSave, #passwordResetbtn {
+  width: 20%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #008115;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+#profileSave:hover, #passwordResetbtn:hover {
+  background-color: #005f0f;
+}
+
+#response {
+  width: 100%;
+  text-align: center;
+}
+#response p {
+  color: #fff;
+  font-size: 16px;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: #005f0f;
+}
+
+#CreateIssue {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1%;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#CreateIssue .input-group {
+  width: 50%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  display: flex;
+  flex-direction: column;
+}
+#CreateIssue .input-group.submit {
+  width: 100%;
+  align-items: center;
+  box-shadow: none;
+}
+#CreateIssue .input-group.submit button {
+  width: 20%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #008115;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+#CreateIssue .input-group.submit button:hover {
+  background-color: #005f0f;
+}
+#CreateIssue .input-group label {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+#CreateIssue .input-group input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+#CreateIssue .input-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#UpdateUsers {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 1%;
+  flex-wrap: wrap;
+}
+#UpdateUsers .input-group {
+  width: 30%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  display: flex;
+  flex-direction: column;
+}
+#UpdateUsers .input-group.submit {
+  width: 100%;
+  align-items: center;
+  box-shadow: none;
+}
+#UpdateUsers .input-group label {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+#UpdateUsers .input-group input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+#UpdateUsers .input-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#AddReview {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1%;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#AddReview .input-group {
+  width: 50%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  display: flex;
+  flex-direction: column;
+}
+#AddReview .input-group.submit {
+  width: 100%;
+  align-items: center;
+  box-shadow: none;
+}
+#AddReview .input-group.submit button {
+  width: 20%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #008115;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+#AddReview .input-group.submit button:hover {
+  background-color: #005f0f;
+}
+#AddReview .input-group label {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+#AddReview .input-group input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+#AddReview .input-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: #5fc370;
+}
+a:hover {
+  color: #01760d;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+button {
+  background-color: #ccc;
+  color: #000;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+}
+button.active {
+  background-color: #005f0f;
+  color: #fff;
+}
+button:hover {
+  background-color: #005f0f;
+  cursor: pointer;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes flipfromtop {
+  from {
+    transform: translateY(-10%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes appearfromleft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}/*# sourceMappingURL=style.css.map */

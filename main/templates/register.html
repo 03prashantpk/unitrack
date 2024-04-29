@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UniTrack</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'scss/style.css' %}" />
+</head>
+
+<body class="RegisterPage">
+
+    <div class="container">
+        <div class="image">
+
+        </div>
+        <div class="form">
+            <form action="" method="Post" id="mainForm">
+                {% csrf_token %}
+                <h1>Register</h1>
+
+                <div class="input-group">
+                    <label for="username"> Username </label>
+                    <input type="text" name="username" id="username" placeholder="Username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" name="fullname" id="fullname" placeholder="Full Name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email </label>
+                    <div class="email-group">
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                        <button type="button" id="sendOTP">Send OTP</button>
+                        
+                    </div>
+                    <p id="message" style="padding: 0 10px; color: red;"></p>
+                </div>
+
+                <div class="input-group">
+                    <label for="password"> Password </label>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm_password"> Confirm Password </label>
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password"
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <button type="button" id="register" disabled> Register</button>
+                </div>
+
+                <p style="padding: 30px;"> 
+                        Already have an account?<a href="/login"> Login</a>
+            </form>
+
+            <form action="" method="post" hidden id="otpform">
+                <h2>Verify OTP</h2>
+                <div class="input-group">
+                    <input type="text" name="otp" placeholder="OTP" required>
+                    <button type="button" id="verifyOTP">Verify OTP</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</body>
+
+<script>
+    const sendOTP = document.getElementById('sendOTP');
+    const verifyOTP = document.getElementById('verifyOTP');
+    const register = document.getElementById('register');
+    const email = document.getElementById('email');
+    const form = document.querySelector('form');
+    const verifyForm = document.querySelector('form:last-of-type');
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    sendOTP.addEventListener('click', () => {
+        const emailValue = email.value;
+        document.getElementById('message').textContent = '';
+        if (emailValue) {
+            const formData = new FormData();
+            formData.append('email', emailValue);
+            document.getElementById('message').textContent = 'Sending OTP...';
+
+            fetch('/send_otp/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+
+                    document.getElementById('message').textContent = data.message;
+
+                    if (data.status === 'success') {
+                        document.getElementById('message').textContent = 'OTP sent successfully';
+                        sendOTP.setAttribute('disabled', 'disabled');
+                        document.getElementById('mainForm').style.display = 'none';
+                        document.getElementById('otpform').removeAttribute('hidden');
+                    }
+                })
+        }
+    });
+
+    verifyOTP.addEventListener('click', () => {
+        const email = document.getElementById('email').value;
+        const otp = document.querySelector('input[name="otp"]').value;
+    
+        if (email && otp) {
+            fetch('/verify_otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    email: email,
+                    otp: otp
+                })
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Enable the register button
+                        document.getElementById('mainForm').style.display = 'block';
+                        document.getElementById('otpform').style.display = 'none';
+                        document.getElementById('email').setAttribute('disabled', 'disabled');
+                        register.removeAttribute('disabled');
+                        document.getElementById('message').textContent = '';
+                    } else {
+                        alert('Invalid OTP');
+                    }
+                })
+        } else {
+            alert('Please enter the OTP');
+        }
+    });
+    
+
+    register.addEventListener('click', () => {
+        const username = document.getElementById('username').value;
+        const fullname = document.getElementById('fullname').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        if (username && fullname && email && password && confirmPassword) {
+            if (password === confirmPassword) {
+                fetch('/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        fullname: fullname,
+                        email: email,
+                        password: password
+                    })
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Registration successful');
+                        } else {
+                           alert(data.message);
+                        }
+                    })
+            } else {
+                alert('Passwords do not match');
+            }
+        } else {
+            alert('Please fill all the fields');
+        }
+    });
+
+</script>
+
+</html>

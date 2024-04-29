@@ -1,0 +1,14 @@
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if title %}
+        {{ title }} - UniTrack
+        {% else %}
+        UniTrack
+        {% endif %}
+    </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'scss/style.css' %}" />
+    <link href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="https://enally.in/images/new/logoenally.png">
+</head>

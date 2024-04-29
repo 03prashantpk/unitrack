@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- get title from url -->
+
+{% include 'components/head.html' with user=user title="Home" %}
+
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content">
+            <!-- Welcome page -->
+            <div class="welcome">
+                <h1>Welcome {{ username }}</h1>
+                <img src="https://cdn.dribbble.com/users/2446970/screenshots/5883361/birdeye_001a.gif" alt="">
+                <p>UniTrack is a platform that allows you to track your university applications and reviews.</p>
+                <p>Get started by adding a review or viewing your applications.</p>
+
+                <div class="buttons">
+                    <a href="/add_review" class="button">Add Review</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+<!-- if username is empty redirect to login -->
+<script>
+    if ("{{ username }}" === "") {
+        window.location.href = "/login";
+    }
+</script>
+
+</html>

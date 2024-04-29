@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- get title from url -->
+
+{% include 'components/head.html' with user=user title="Home" %}
+
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content">
+            <div class="tab-btn">
+                <button class="tablinks active" onclick="openTab(event, 'profile')">Profile</button>
+                <button class="tablinks" onclick="openTab(event, 'settings')">Settings</button>
+                <button class="tablinks" onclick="resetPassword()">Reset Password</button>
+            </div>
+
+            <div id="profile" class="tabcontent">
+                <div class="profile">
+                    <div class="image">
+                        <img src="https://cdn3d.iconscout.com/3d/premium/thumb/student-5565610-4715116.png" alt="Profile Picture">
+                    </div>
+
+                    <div class="details">
+                        <h4>
+                            {{user.full_name}}
+                        </h4>
+
+                        <div class="cards">
+                            <div class="card">
+                                <h5>Email</h5>
+                                <p>{{user.email}}</p>
+                            </div>
+                            <div class="card">
+                                <h5>Phone</h5>
+                                <p>{{user.phone}}</p>
+                            </div>
+                            <div class="card">
+                                <h5>Address</h5>
+                                <p>{{user.address}}</p>
+                            </div>
+                            <!-- username -->
+                            <div class="card">
+                                <h5>Username</h5>
+                                <p>{{user.username}}</p>
+                            </div>
+                            <div class="card">
+                                <h5>Branch</h5>
+                                <p>{{user.branch}}</p>
+                            </div>
+
+                            <div class="card">
+                                <h5>Semester</h5>
+                                <p>{{user.semester}}</p>
+                            </div>
+
+                            <!-- total_review -->
+                            <div class="card">
+                                <h5>Total Reviews</h5>
+                                <p>{{total_review}} - <a href="#">View Reviews</a></p>
+                                
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings" class="tabcontent" style="display: none;">
+                <h3>Settings</h3>
+                <form id="settingsForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{user.username}}">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Email" value="{{user.email}}" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" id="phone" placeholder="Phone" value="{{user.phone}}" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="address">Address</label>
+                        <input type="text" name="address" id="address" placeholder="Address" value="{{user.address}}"
+                            required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Branch">Branch</label>
+                        <input type="text" name="branch" id="branch" placeholder="Branch" value="{{user.branch}}"
+                            required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Semester">Semester</label>
+                        <input type="text" name="semester" id="semester" placeholder="Semester"
+                            value="{{user.semester}}" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Roll No">Roll No</label>
+                        <input type="text" name="roll_no" id="roll_no" placeholder="Roll No" value="{{user.roll_no}}"
+                            required>
+                    </div>
+
+                    <!-- Admin controls -->
+                    {% if user.is_admin %}
+
+                    <div class="input-group">
+                        <label for="is_admin">Admin</label>
+                        <select name="is_admin" id="is_admin">
+                            <option value="1" {% if user.is_admin %} selected {% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_admin %} selected {% endif %}>No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="is_active">Active</label>
+                        <select name="is_active" id="is_active">
+                            <option value="1" {% if user.is_active %} selected {% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_active %} selected {% endif %}>No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="is_staff">Staff</label>
+                        <select name="is_staff" id="is_staff">
+                            <option value="1" {% if user.is_staff %} selected {% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_staff %} selected {% endif %}>No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="is_superuser">Superuser</label>
+                        <select name="is_superuser" id="is_superuser">
+                            <option value="1" {% if user.is_superuser %} selected {% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_superuser %} selected {% endif %}>No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="is_blocked">Blocked</label>
+                        <select name="is_blocked" id="is_blocked">
+                            <option value="1" {% if user.is_blocked %} selected {% endif %}>Yes</option>
+                            <option value="0" {% if not user.is_blocked %} selected {% endif %}>No</option>
+                        </select>
+                    </div>
+                    
+                    {% endif %}
+
+
+                    <div class="input-group submit">
+                        <button type="submit" id="profileSave">Save</button>
+                    </div>
+
+                    <p id="response"></p>
+                </form>
+            </div>
+
+            <div id="resetPassword" class="tabcontent" style="display: none;">
+                <h3>Reset Password</h3>
+
+                <form id="resetPasswordForm">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="oldPassword">Current Password</label>
+                        <input type="password" name="oldPassword" id="oldPassword" placeholder="Current Password"
+                            required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" name="newPassword" id="newPassword" placeholder="New Password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" name="confirmPassword" id="confirmPassword"
+                            placeholder="Confirm Password" required>
+                    </div>
+                    <div class="input-group submit">
+                        <button type="submit" id="passwordResetbtn">Save</button>
+                    </div>
+                    <p id="response"></p>
+
+                    <p id="response_reset_pass"></p>
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+<!-- if username is empty redirect to login -->
+<script>
+    if ("{{ username }}" === "") {
+        window.location.href = "/login";
+    }
+</script>
+
+<script>
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function resetPassword() {
+        document.getElementById("resetPasswordForm").reset();
+        openTab(event, 'resetPassword');
+    }
+</script>
+
+
+<script>
+    document.getElementById("settingsForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var form = this;
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Display response message
+                document.getElementById("response_reset_pass").textContent = data.message;
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("response_reset_pass").textContent = "An error occurred. Please try again.";
+            });
+    });
+</script>
+
+
+<script>
+    document.getElementById("resetPasswordForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
+    
+        // Extract form data
+        var oldPassword = document.getElementById("oldPassword").value;
+        var newPassword = document.getElementById("newPassword").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+    
+        // Check if new password matches confirm password
+        if (newPassword !== confirmPassword) {
+            document.getElementById("response").innerText = "New password and confirm password do not match";
+            return;
+        }
+    
+        // Create XHR object
+        var xhr = new XMLHttpRequest();
+        var url = "/reset_password/";
+    
+        // Set up POST request
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+        // Get CSRF token from the cookie
+        var csrftoken = getCookie('csrftoken');
+        // Set CSRF token in request headers
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    
+        // Define function to handle response
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("response_reset_pass").innerText = response.message;
+                    if (response.status === "success") {
+                        document.getElementById("resetPasswordForm").reset();
+                        document.getElementById("response_reset_pass").innerText = "Successfully reset password";
+                        setTimeout(() => {
+                            openTab(event, 'profile');
+                            document.getElementById("response_reset_pass").innerText = "";
+                        }, 1000);
+                    }
+                } else {
+                    document.getElementById("response_reset_pass").innerText = "Error occurred while resetting password";
+                }
+            }
+        };
+    
+        // Send POST request with form data
+        xhr.send("old_password=" + oldPassword + "&new_password=" + newPassword);
+    });
+    
+    // Function to get CSRF cookie value
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Check if cookie name matches the CSRF token name
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+
+</html>

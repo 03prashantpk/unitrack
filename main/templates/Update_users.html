@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- get title from url -->
+
+{% include 'components/head.html' with user=user title="Update Users - Admin" %}
+
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content">
+            <form id="UpdateUsers">
+                {% csrf_token %}
+                <input type="hidden" name="username" value="{{user.username}}">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email" value="">
+                </div>
+
+                <!-- Admin controls -->
+                {% if user.is_admin %}
+                
+                <div class="input-group">
+                    <label for="is_admin">Admin</label>
+                    <select name="is_admin" id="is_admin">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="is_active">Active</label>
+                    <select name="is_active" id="is_active">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="is_staff">Staff</label>
+                    <select name="is_staff" id="is_staff">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="is_superuser">Superuser</label>
+                    <select name="is_superuser" id="is_superuser">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="is_blocked">Blocked</label>
+                    <select name="is_blocked" id="is_blocked">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                
+                {% endif %}
+
+
+                <div class="input-group submit">
+                    <button type="submit" id="profileSave">Save</button>
+                </div>
+
+                <p id="response"></p>
+            </form>
+        </div>
+
+
+    </div>
+
+</body>
+    <!-- if username is empty redirect to login -->
+    <script>
+        if ("{{ username }}" === "") {
+            window.location.href = "/login";
+        }
+    </script>
+    <script>
+        document.getElementById("UpdateUsers").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            var form = this;
+            var formData = new FormData(form);
+    
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display response message
+                    document.getElementById("response_reset_pass").textContent = data.message;
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("response_reset_pass").textContent = "An error occurred. Please try again.";
+                });
+        });
+    </script>
+</html>

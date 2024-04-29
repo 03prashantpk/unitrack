@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UniTrack</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'scss/style.css' %}" />
+</head>
+
+<body class="RegisterPage">
+    <div class="container">
+        <div class="image"></div>
+        <div class="form">
+            <form id="registerForm">
+                {% csrf_token %}
+                <h1>Login</h1>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+
+                <div class="input-group">
+                    <button type="submit">Register</button>
+                </div>
+
+                <p style="padding: 30px;"> Do not have an account?<a href="/register">Register</a></p>
+            </form>
+            
+            <p id="message" class="message"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var form = this;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display response message
+                    document.getElementById("message").textContent = data.message;
+                    if (data.status === "success") {
+                        // Redirect to home page
+                        window.location.href = "/home";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("message").textContent = "An error occurred. Please try again.";
+                });
+        });
+    </script>
+</body>
+
+</html>

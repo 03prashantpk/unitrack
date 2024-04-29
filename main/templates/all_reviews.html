@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- get title from url -->
+{% include 'components/head.html' with user=user title="Home" %}
+<!-- contigure static -->
+{% load static %}
+<body class="Home">
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+    <!-- Main Section -->
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+        <div class="content" style="flex-direction:column; align-items: start; justify-content:start;">
+            <!-- loop through all allReview in table -->
+            <div class="tabs">
+                <button onclick="openTab(event, 'allReviews')">All Reviews</button>
+                <button onclick="openTab(event, 'addedByYou')">Added By You</button>
+            </div>
+            <div class="reviews" style="width: 100%;">
+                <div id="allReviews">
+                    <h2>All Reviews</h2>
+                    <table>
+                        <tr>
+                            <th>Review To</th>
+                            <th>Review By</th>
+                            <th>Description</th>
+                            <th>Document</th>
+                            <th>Rating</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for review in allReview %}
+                        <tr>
+                            <td>{{ review.review_to }}</td>
+                            <td>{{ review.review_by }}</td>
+                            <td>{{ review.description }}</td>
+                            <td><a href="{% static 'files/' %}{{ review.document }}">{{ review.document }}</a></td>
+                            <td>{{ review.rating }}</td>
+                            <td><a href="/delete_review/{{ review.id }}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div id="addedByYou" style="display: none;">
+                    <h2>Reviews Added By You</h2>
+                    <table>
+                        <tr>
+                            <th>Review To</th>
+                            <th>Review By</th>
+                            <th>Description</th>
+                            <th>Document</th>
+                            <th>Rating</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for review in addedby %}
+                        <tr>
+                            <td>{{ review.review_to }}</td>
+                            <td>{{ review.review_by }}</td>
+                            <td>{{ review.description }}</td>
+                            <td><a href="{% static 'files/' %}{{ review.document }}">{{ review.document }}</a></td>
+                            <td>{{ review.rating }}</td>
+                            <td><a href="/delete_review/{{ review.id }}" disabled>Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- if username is empty redirect to login -->
+<script>
+    if ("{{ username }}" === "") {
+        window.location.href = "/login";
+    }
+</script>
+<script>
+    function openTab(event, tabName) {
+        var i, tabContent;
+        tabContent = document.getElementsByClassName("reviews")[0].getElementsByTagName("div");
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+            // add class active to the button that opened the tab
+            event.currentTarget.className = "active";
+        }
+        document.getElementById(tabName).style.display = "block";
+        if (tabName === "allReviews") {
+            document.getElementsByTagName("button")[1].className = "";
+        } else {
+            document.getElementsByTagName("button")[0].className = "";
+        }
+    }
+</script>
+</html>
