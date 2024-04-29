@@ -1,6 +1,6 @@
 # UniTrack
 
-<img scr="https://github.com/03prashantpk/unitrack/blob/main/static/files/unitrack.png" width="100%" />
+<img scr="https://raw.githubusercontent.com/03prashantpk/unitrack/main/static/files/unitrack.png" width="100%" />
 
 UniTrack is a pioneering web-based platform designed to revolutionize performance evaluation within university settings. Built upon a sophisticated blend of cutting-edge technologies including Django, Python, HTML, CSS (SCSS), and JavaScript, UniTrack embodies a commitment to transparency, accountability, and ongoing enhancement across all facets of higher education institutions.
 
