@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from main.credentials import auth_user,  auth_password, db_name, host
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -136,10 +138,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # SMTP email settings
 EMAIL_HOST = 'mail.enally.in'
-EMAIL_PORT = 587  # Port for SMTP (587 is commonly used for TLS)
-EMAIL_HOST_USER = 'support@enally.in'  # Your SMTP username
-EMAIL_HOST_PASSWORD = 'Nagaland@123pk'  # Your SMTP password
-EMAIL_USE_TLS = True  # Use TLS (True for most SMTP servers)
+EMAIL_PORT = 587 
+EMAIL_HOST_USER = auth_user
+EMAIL_HOST_PASSWORD = auth_password
+EMAIL_USE_TLS = True 
 
 # Default email address for sending emails
 DEFAULT_FROM_EMAIL = 'support@enally.in'
