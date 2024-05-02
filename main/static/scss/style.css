@@ -626,6 +626,61 @@ body {
   outline: none;
 }
 
+#LogRMS {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1%;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#LogRMS .input-group {
+  width: 80%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  display: flex;
+  flex-direction: column;
+}
+#LogRMS .input-group.submit {
+  width: 100%;
+  align-items: center;
+  box-shadow: none;
+}
+#LogRMS .input-group.submit button {
+  width: 20%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #008115;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+#LogRMS .input-group.submit button:hover {
+  background-color: #005f0f;
+}
+#LogRMS .input-group label {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+#LogRMS .input-group input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+#LogRMS .input-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
 #AddReview {
   width: 100%;
   display: flex;
@@ -637,7 +692,7 @@ body {
   flex-direction: column;
 }
 #AddReview .input-group {
-  width: 50%;
+  width: 80%;
   padding: 10px;
   border-radius: 8px;
   background-color: #fff;
@@ -679,6 +734,38 @@ body {
   border-radius: 8px;
   border: 1px solid #ccc;
   outline: none;
+}
+
+.Add-review-Instruction {
+  width: 60%;
+  padding: 2%;
+  text-align: center;
+}
+.Add-review-Instruction h3 {
+  color: #008115;
+  margin-bottom: 10px;
+}
+.Add-review-Instruction p {
+  color: #242424;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.Add-review-Instruction ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.Add-review-Instruction ul li {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #008115;
+  color: #fff;
+  cursor: pointer;
+}
+.Add-review-Instruction ul li:hover {
+  background-color: #005f0f;
 }
 
 a {

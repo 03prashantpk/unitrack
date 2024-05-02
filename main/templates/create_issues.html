@@ -77,6 +77,15 @@
                         <input type="text" name="description" id="description" placeholder="Description" required>
                     </div>
 
+                    <!--  type public or private -->
+                    <div class="input-group">
+                        <label for="type">Status</label>
+                        <select name="type" id="type" required>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+
                     <div class="input-group submit">
                         <button type="submit">Create Issue</button>
                     </div>
@@ -100,14 +109,19 @@
                             <p><strong>Status:</strong> {{ issue.status }}</p>
                             <br>
                             <button class="cta-button"><i class="fas fa-reply"></i> Answer this</button>
+                            <!-- Upvote button -->
+                            <button class="cta-button upvote" data-id="{{ issue.id }}"><i class="fas fa-thumbs-up"></i> Upvote</button>
+                            
+                            <!-- if user and session user is same add delete button-->
+                            {% if user.email == issue.user_email %}
+                            <button class="cta-button delete" style="background-color: red;" data-id="{{ issue.id }}"><i class="fas fa-trash"></i> Delete</button>
+                            {% endif %}
+
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 
-                
-                
-
             </div>
 
 

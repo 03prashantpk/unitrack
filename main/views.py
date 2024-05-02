@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import os
+import uuid
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -14,7 +15,7 @@ from django.contrib.auth import authenticate, login as auth_login
 import json
 from django.contrib.auth import ( SESSION_KEY,) 
 # import modals
-from main.models import User, Review, GlobalIssues
+from main.models import User, Review, GlobalIssues, RMS, RMSChat
 
 from main.credentials import auth_user, auth_password
 
@@ -420,6 +421,7 @@ def add_global_issues(request):
     if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description")
+        type = request.POST.get("type")
         created_at = str(datetime.datetime.now())
         
         # Add data to the GlobalIssues collection with title, description, created_at, status, and posted_by
@@ -430,6 +432,7 @@ def add_global_issues(request):
                 user_email=user.email,
                 title=title, 
                 description=description, 
+                type=type,
                 created_at=created_at, 
                 status="Pending",
             )
@@ -440,7 +443,231 @@ def add_global_issues(request):
                 return JsonResponse({"status": "error", "message": str(e)})
     else:
         user = User.objects(email=request.session.get("user_email")).first()
-        # fatch all the issues as object from collection "global_issues"
-        issues = GlobalIssues.objects()
+        # fatch all the issues as object from collection "global_issues" type = "Public"
+        issues = GlobalIssues.objects(type="public")
         
         return render(request, "create_issues.html", {"username": request.session.get("user_username"), "user": user, "issues": issues})
+
+
+def rms(request):
+    if request.method == "GET":
+        user_email = request.session.get("user_email")
+        all_rms = RMS.objects(user_email=user_email)
+        return render(request, "rms.html", {"all_rms": all_rms})
+    elif request.method == "POST":
+        return render(request, "rms.html")
+    else:
+        return render(request, "rms.html")
+    
+    
+from datetime import datetime, timedelta
+def log_rms(request):
+    if request.method == "GET":
+        # Fetch all global issues
+        return render(request, "log_rms.html")
+    elif request.method == "POST":
+        # Extract form data
+        user = request.session.get("user_username")
+        user_email = request.session.get("user_email")
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        department = request.POST.get('department')
+        status = "Pending"
+        created_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        updated_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        assigned_to = "Unitrack Admin" 
+        assigned_to_email = "support@enally.in" 
+        
+        send_mail(
+                "RMS Logged by User",
+                f"RMS has been logged by {user} with title {title}. Please check the RMS dashboard for more details.",
+                "prashantmanwan@gmai.com",  # Replace with your sender email
+                [assigned_to_email],
+                fail_silently=False,
+                auth_user= auth_user,
+                auth_password= auth_password,
+            )
+        
+        
+        # Check if files are present in the request 
+        if 'document' in request.FILES:
+            files = request.FILES.getlist('document')
+            save_directory = 'main/static/files'
+            if not os.path.exists(save_directory):
+                os.makedirs(save_directory)
+            for file in files:
+                # Generate random filename
+                random_filename = str(uuid.uuid4())
+                # Get file extension
+                file_extension = os.path.splitext(file.name)[1]
+                # Construct new file path
+                file_path = os.path.join(save_directory, random_filename + file_extension)
+                # Write file to disk
+                with open(file_path, 'wb+') as destination:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                # Save file name to database
+                RMS.objects.create(
+                    user=user,
+                    user_email=user_email,
+                    title=title,
+                    description=description,
+                    department=department,
+                    supporting_document=random_filename + file_extension,
+                    status=status,
+                    created_at=created_at,
+                    updated_at=updated_at,
+                    assigned_to=assigned_to,
+                    assigned_to_email=assigned_to_email
+                )
+        else:
+            RMS.objects.create(
+                user=user,
+                user_email=user_email,
+                title=title,
+                description=description,
+                department=department,
+                status=status,
+                created_at=created_at,
+                updated_at=updated_at,
+                assigned_to=assigned_to,
+                assigned_to_email=assigned_to_email
+            )
+
+        # Return success response
+        return JsonResponse({'message': 'RMS logged successfully'}, status=200)
+    else:
+        return render(request, "log_rms.html")
+
+
+def rms_status(request):
+    if request.method == "GET":
+        # Fetch all RMS forms associated with the user's email
+        user_email = request.session.get("user_email")
+        all_rms = RMS.objects(user_email=user_email)
+        
+        def formatDate(date):
+            # Format as 20 July 20 
+            return datetime.now().strftime("%d %B %y")
+        
+        all_rms_formatted = [
+            {
+                "id": rms.id,
+                "title": rms.title,
+                "status": rms.status,
+                "description": rms.description,
+                "supporting_document" : rms.supporting_document,
+                "created_at": formatDate(rms.created_at),
+                "updated_at": formatDate(rms.updated_at),
+                "assigned_to": rms.assigned_to,
+            }
+            for rms in all_rms
+        ]
+        
+        return render(request, "rms_status.html", {"all_rms": all_rms_formatted})
+
+def format_timedelta(td):
+    days = td.days
+    hours, remainder = divmod(td.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    parts = []
+    if days > 0:
+        parts.append(f"{days} day{'s' if days != 1 else ''}")
+    if hours > 0:
+        parts.append(f"{hours} hour{'s' if hours != 1 else ''}")
+    if minutes > 0:
+        parts.append(f"{minutes} minute{'s' if minutes != 1 else ''}")
+
+    return ' '.join(parts)
+
+def rms_details(request, rms_id):
+    # Fetch details of the specific RMS using the provided ID
+    rms = RMS.objects.get(id=rms_id)
+    
+    # Check if the RMS is pending for 48 hours
+    is_pending_for_48_hours = False
+    created_at = datetime.strptime(rms.created_at, "%Y-%m-%d %H:%M:%S")
+    if rms.status == 'Pending':
+        current_datetime = datetime.now()
+        time_difference = current_datetime - created_at
+        if time_difference >= timedelta(hours=48):
+            is_pending_for_48_hours = True
+
+    # Calculate time remaining for pending RMS
+    time_remaining = None
+    if is_pending_for_48_hours:
+        time_remaining = "Expired"
+    else:
+        time_remaining = format_timedelta(timedelta(hours=48) - time_difference)
+
+    return render(request, "rms_details.html", {"rms": rms, "is_pending_for_48_hours": is_pending_for_48_hours, "time_remaining": time_remaining})
+
+def rms_chat(request, rms_id):
+    if request.method == "GET":
+        # Fetch all chat messages for the specific RMS
+        rms_chat = RMSChat.objects.filter(rms_id=rms_id).first()
+        
+        # fatch rms details from RMS collection
+        rms = RMS.objects.get(id=rms_id)
+       
+        
+        # Mark all messages as read
+        if rms_chat:
+            rms_chat.is_read = True
+            rms_chat.save()
+            return render(request, "rms_chat.html", {"rms_chat": rms_chat, "rms": rms})
+        else:
+            return render(request, "rms_chat.html", {"rms_chat": None, "rms": rms})
+
+    elif request.method == "POST":
+        # Extract form data
+        message = request.POST.get("message")
+        user_id = request.session.get("user_id")
+        user_email = request.session.get("user_email")
+        faculty_id = request.POST.get("faculty_id")
+        faculty_email = request.POST.get("faculty_email")
+        chat_title = request.POST.get("chat_title")
+        created_at = datetime.now()
+        
+        # Retrieve existing chat or create new if not exists
+        rms_chat = RMSChat.objects.filter(rms_id=rms_id).first()
+        if not rms_chat:
+            rms_chat = RMSChat.objects.create(
+                rms_id=rms_id,
+                user_email=user_email,
+                faculty_id=faculty_id,
+                faculty_email=faculty_email,
+                chats=[],
+                date_created=created_at,
+                date_updated=created_at,
+                closed_chat_by_user=False,
+                closed_chat_by_faculty=False
+            )
+        
+        # Append new message to the chats array
+        rms_chat.chats.append({
+            "user_id": user_id,
+            "user_email": user_email,
+            "message": message,
+            "timestamp": created_at
+        })
+        rms_chat.date_updated = created_at
+        rms_chat.save()
+        
+        # Return success response
+        return JsonResponse({"success": True, "message": "Message sent successfully"}, status=200)
+    else:
+        return render(request, "rms_chat.html")
+    
+
+def rms_chats(request, rms_id):
+    if request.method == "GET":
+        # Fetch all chat messages for the specific RMS
+        rms_chat = RMSChat.objects.filter(rms_id=rms_id).first()
+        
+        # fatch rms details from RMS collection
+        rms = RMS.objects.get(id=rms_id)
+        print(rms_chat.chats)
+        
+        return JsonResponse({"status": "success", "data": rms_chat.chats})

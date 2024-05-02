@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'components/head.html' with user=user title="RMS Details" %}
+    <style>
+        /* Card styles */
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%; /* Full width for details view */
+            padding: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header, .card-footer {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+        .cta-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .card-footer p {
+            padding: 10px 0;
+        }
+
+        .highlight {
+            background-color: #f5f5f5;
+        }
+
+        /* Highlight username */
+        .highlight-username {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Description box styling */
+        .description-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .reply-box {
+            max-height: 120px;
+            overflow: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            margin-bottom: 15px;
+        }
+        .card-body p {
+            margin-bottom: 10px;
+        }
+
+        /* Email links */
+        .email-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content">
+            <!-- Display details of the specific RMS -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ rms.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>User:</strong> <span class="highlight-username">{{ rms.user }}</span></p>
+                            <p><strong>User Email:</strong> <a href="mailto:{{ rms.user_email }}" class="email-link">{{ rms.user_email }}</a></p>
+                            <p><strong>Status:</strong> <span class="highlight" style="{% if rms.status == 'Pending' %}color: red;{% else %}color: green;{% endif %}">{{ rms.status }}</span></p>
+                            <p><strong>Assigned To:</strong> {{ rms.assigned_to }}</p>
+                            <!-- Assigned doc -->
+                            <p><strong>Assigned Document:</strong> <a href="../../static/files/{{ rms.supporting_document }}" target="_blank">{{ rms.supporting_document }}
+                                <i class="fa fa-download"></i>    
+                            </a></p>
+
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Department:</strong> {{ rms.department }}</p>
+                            <p><strong>Assigned To Email:</strong> <a href="mailto:{{ rms.assigned_to_email }}" class="email-link">{{ rms.assigned_to_email }}</a></p>
+                            <p><strong>Created At:</strong> {{ rms.created_at }}</p>
+                            <p><strong>Updated At:</strong> {{ rms.updated_at }}</p>
+                        </div>
+                    </div>
+
+                    <p><strong>Description:</strong></p>
+                    <div class="description-box">
+                        <p>{{ rms.description }}</p>
+                    </div>
+
+                    <p><strong>Reply:</strong></p>
+                    <div class="reply-box">
+                        <p>
+                            {% if rms.reply %}
+                                {{ rms.reply }}
+                            {% else %}
+                                No reply yet.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    {% if is_pending_for_48_hours %}
+                        <form method="POST" action="{% url 'forward_rms' rms.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="cta-button">Forward to Administrator</button>
+                        </form>
+                    {% else %}
+                        <p style="color: red;">Wait for 48 hours. After that, you can forward this RMS to the administrator. Remaining time: {{time_remaining}} <button type="submit" class="cta-button" disabled>Forward to Administrator</button></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

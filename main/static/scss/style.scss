@@ -677,8 +677,7 @@ body {
   }
 
 }
-
-#AddReview{
+#LogRMS{
   width: 100%;
   display: flex;
   justify-content: center;
@@ -689,7 +688,7 @@ body {
   flex-direction: column;
 
   .input-group {
-    width:50%;
+    width:80%;
     padding: 10px;
     border-radius: 8px;
     background-color: #fff;
@@ -733,6 +732,101 @@ body {
       border: 1px solid #ccc;
       outline: none;
     }
+  }
+
+
+}
+
+#AddReview{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1%;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  .input-group {
+    width:80%;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    display: flex;
+    flex-direction: column;
+    &.submit {
+      width: 100%;
+      align-items: center;
+      box-shadow: none;
+      button{
+        width: 20%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        background-color: #008115;
+        color: #fff;
+        cursor: pointer;
+        outline: none;
+        &:hover {
+          background-color: #005f0f;
+        }
+      }
+    }
+
+    label {
+      color: #242424;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    select{
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+  }
+}
+
+.Add-review-Instruction{
+  width: 60%;
+  padding: 2%;
+  text-align: center;
+  h3{
+    color: #008115;
+    margin-bottom: 10px;
+  
+  }
+  p{
+    color: #242424;
+    font-size: 16px;
+    margin-bottom: 10px;
+  
+  }
+  ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    li{
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #008115;
+      color: #fff;
+      cursor: pointer;
+      &:hover{
+        background-color: #005f0f;
+      }
+    }
+  
   }
 }
 

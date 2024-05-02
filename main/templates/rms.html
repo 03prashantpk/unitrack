@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'components/head.html' with user=user title="Home" %}
+    <style>
+        /* Card styles */
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            width: 30%;
+            padding: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header,
+        .card-footer {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .cta-button {
+            background-color: #008115;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            outline: none;
+        }
+
+        .cta-button:hover {
+            background-color: #005f0f;
+            color: #fff;
+        }
+
+        .fa-icon {
+            margin-right: 5px;
+        }
+
+        /* Select styles */
+        select {
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:hover,
+        select:focus {
+            border-color: #008115;
+        }
+
+        /* Placeholder image */
+        .placeholder-image {
+            width: 100%;
+            height: 150px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .placeholder-image > img{
+            width: 100%;    
+            height: 150px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content" style="gap: 30px;">
+            <!-- Log rms and Request rms card with title and p and button-->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Log RMS</h3>
+                </div>
+                <div class="card-body">
+                    <div class="placeholder-image">
+                        <!-- dummy placeholder image -->
+                        <img src="https://www.shutterstock.com/image-photo/requests-written-on-blue-key-260nw-1793723953.jpg" alt="Placeholder image">
+                    </div>
+                    <p>You have the option to record RMS data for the Examination Department, Placement Department,
+                        Teachers, and other relevant entities.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="/log_rms" class="cta-button">Log RMS</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>RMS Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="placeholder-image">
+                        <!-- dummy placeholder image -->
+                        <img src="https://i.pinimg.com/originals/43/bf/27/43bf277e2f8620f3ffa874fbaec55a3c.gif" alt="Placeholder image">
+                    </div>
+                    <p>Here, you can monitor the status of your RMS requests to see whether they have been read,
+                        forwarded, or processed, among other updates.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="/rms_status" class="cta-button">View Status</a>
+                </div>
+            </div>
+
+            <!-- Chat for rms -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Chat</h3>
+                </div>
+                <div class="card-body">
+                    <div class="placeholder-image">
+                        <!-- dummy placeholder image -->
+                        <img src="https://i.pinimg.com/originals/7c/1d/ab/7c1dab157f34e603487b5d0b057da448.gif" alt="Placeholder image">
+                    </div>
+                    <p>Engage in a two-way chat with faculty members who have responded to your RMS. Once you're
+                        satisfied with the resolution, you can close the RMS.</p>
+
+                    <select name="rmsId" id="rmsId">
+                        <!-- Loop through all_rms to create options -->
+                        <option value="" selected>Select RMS</option>
+                        {% for rms in all_rms %}
+                        <option value="{{ rms.id }}">{{ rms.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="cta-button" id="startChatBtn">Start Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("rmsId").addEventListener("change", function() {
+            var selectedRmsId = this.value;
+            var startChatBtn = document.getElementById("startChatBtn");
+    
+            startChatBtn.href = "/rms_chat/" + selectedRmsId;
+        });
+    
+        // Event listener for start chat button
+        document.getElementById("startChatBtn").addEventListener("click", function(event) {
+            if (document.getElementById("rmsId").value === "") {
+                event.preventDefault();
+                alert("Please select an RMS to start chat");
+            }
+        });
+    </script>
+    
+
+</body>
+</html>

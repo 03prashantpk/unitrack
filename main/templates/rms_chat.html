@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'components/head.html' with user=user title="Home" %}
+    <style>
+        /* Card styles */
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            width: 80%;
+            padding: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header,
+        .card-footer {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .cta-button {
+            background-color: #008115;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            outline: none;
+        }
+
+        .cta-button:hover {
+            background-color: #005f0f;
+            color: #fff;
+        }
+
+        /* Chat styles */
+        .chat-box {
+            height: calc(100vh - 300px);
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .chat-message p {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .sender-message {
+            justify-content: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        .chat-input button {
+            background-color: #008115;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+
+        .chat-input button:hover {
+            background-color: #005f0f;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content" style="gap: 30px;">
+            <!-- Chat page UI -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Chatting for: {{ rms.title }} </h3>
+                    <input type="hidden" hidden value="{{ rms.id }}" id="rms_id">
+                </div>
+                <div class="card-body">
+                    <div class="chat-box" id="chatBox">
+                        <!-- Render chat messages here -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type your message here...">
+                        <button class="cta-button" id="sendMessageBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch chat messages from the backend and update the chat box
+        const fetchMessages = () => {
+            const rms_id = document.getElementById("rms_id").value;
+            return fetch(`/rms_chats/${rms_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    return data.messages;
+                })
+                .catch(error => {
+                    console.error('Error fetching messages:', error);
+                    return [];
+                });
+        }
+
+        // Function to render messages onto the chat box
+        const renderMessages = async () => {
+            const messages = await fetchMessages();
+            const chatBox = document.getElementById("chatBox");
+            chatBox.innerHTML = "";
+            messages.forEach(message => {
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("chat-message");
+                if (message.sender === "user") {
+                    messageElement.classList.add("user-message");
+                } else {
+                    messageElement.classList.add("sender-message");
+                }
+                messageElement.innerHTML = `<p>${message.chats}</p>`;
+                chatBox.appendChild(messageElement);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        // Call renderMessages initially
+        renderMessages();
+
+        // Call renderMessages every 3 seconds
+        setInterval(renderMessages, 3000);
+
+
+
+        // Event listener for send message button
+        document.getElementById("sendMessageBtn").addEventListener("click", function () {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value.trim();
+            if (message !== "") {
+                fetch(window.location.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token in request headers
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const chatBox = document.getElementById("chatBox");
+                            const messageElement = document.createElement("div");
+                            messageElement.classList.add("chat-message");
+                            messageElement.classList.add("user-message");
+                            messageElement.innerHTML = `
+                                <p>${message}</p>
+                            `;
+                            chatBox.appendChild(messageElement);
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                        } else {
+                            console.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error sending message:', error);
+                    });
+                messageInput.value = "";
+            }
+        });
+
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+
+</html>

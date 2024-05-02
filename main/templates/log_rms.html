@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'components/head.html' with user=user title="Home" %}
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 80%;
+            padding: 10px 20px;
+            overflow: hidden;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header, .card-footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+            color: #Fff;
+        }
+
+        .fa-icon {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body class="Home">
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+    <!-- Main Section -->
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+        <div class="content" style="gap: 10px;">
+           <!-- Log rms form with select>department, rms title, rms description, supported document (file) -->
+            <div class="card" style="width: 80%;">
+                <div class="card-header" style="text-align: center;">
+                    <h3>Log RMS</h3>
+                </div>
+                <div class="card-body">
+                    <form id="LogRMS" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label for="department">Department</label>
+                            <select name="department" id="department" required>
+                                
+                                <option value="">Select</option>
+                                <option value="Academic">Academic</option>
+                                <option value="Placement">Placement</option>
+                                <option value="Examination">Examination</option>
+                                <option value="Head Of Department">Head Of Department</option>
+                                <option value="Administrator">Administrator</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="title">Title</label>
+                            <input type="text" name="title" id="title" placeholder="Title" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="description">Description</label>
+                            <textarea type="text" name="description" id="description" placeholder="Description" required> </textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="document">Supporting Document</label>
+                            <input type="file" name="document" id="document" placeholder="Add Supporting Document" required>
+                        </div>
+
+                        <div class="input-group submit">
+                            <button type="submit">Log RMS</button>
+                        </div>
+
+                        <p id="RMSResponse"></p>
+                        <progress id="uploadProgress" value="0" max="100"></progress>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("LogRMS").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var form = this;
+            var formData = new FormData(form);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+
+            xhr.upload.onprogress = function (event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / event.total) * 100;
+                    document.getElementById("uploadProgress").value = percentComplete;
+                }
+            };
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById("RMSResponse").textContent = xhr.responseText;
+                } else {
+                    document.getElementById("RMSResponse").textContent = "An error occurred. Please try again.";
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error("Error occurred while sending request.");
+                document.getElementById("RMSResponse").textContent = "An error occurred. Please try again.";
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- get title from url -->
+
+{% include 'components/head.html' with user=user title="Home" %}
+<style>
+    /* Card styles */
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        width: 30%;
+        padding: 10px 20px;
+        overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header, .card-footer {
+        background-color: #f0f0f0;
+        padding: 10px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .cta-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .cta-button:hover {
+        background-color: #0056b3;
+        color: #Fff;
+    }
+
+    .card-footer p {
+        padding: 10px 0;
+    }
+
+    .fa-icon {
+        margin-right: 5px;
+    }
+</style>
+
+<body class="Home">
+
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' with user=user %}
+
+    <!-- Main Section -->
+
+    <div class="main">
+        {% include 'components/navbar.html' with user=user %}
+
+        <div class="content" style="gap: 10px;">
+            
+            <!-- loop all rms from object all_rms as card-->
+            {% for rms in all_rms %}
+            <div class="card">
+                <div class="card-header">   
+                    <h3>{{ rms.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>{{ rms.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="/rms_status/{{ rms.id }}" class="cta-button">
+                        <i class="fa fa-eye fa-icon"></i>View
+                    </a>
+                    
+                    <p>Status:
+                        <span style="{% if rms.status == 'Pending' %}color: red;{% else %}color: green;{% endif %}">
+                            {{ rms.status }}
+                        </span>
+                        | Department: {{ rms.department }}
+                    </p>
+                    
+                </div>
+            </div>
+            {% endfor %}
+            
+            
+            
+        </div>
+
+
+    </div>
+
+</body>
+
+
+</html>
